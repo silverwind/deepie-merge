@@ -16,6 +16,9 @@ deepMerge({a: [1]}, {a: [2]});
 
 deepMerge({a: [1]}, {a: [2]}, {arrayExtend: true});
 // => {a: [1, 2]}
+
+deepMerge({a: [1], b: [1]}, {a: [2], b: [2]}, {arrayExtend: ["a"]});
+// => {a: [1, 2], b: [2]}
 ```
 
 © [silverwind](https://github.com/silverwind), distributed under BSD licence
