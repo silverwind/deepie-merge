@@ -1,7 +1,7 @@
 # deepie-merge
 [![](https://img.shields.io/npm/v/deepie-merge.svg?style=flat)](https://www.npmjs.org/package/deepie-merge) [![](https://img.shields.io/npm/dm/deepie-merge.svg)](https://www.npmjs.org/package/deepie-merge) [![](https://packagephobia.com/badge?p=deepie-merge)](https://packagephobia.com/result?p=deepie-merge)
 
-> Yet another deep merge
+> Yay, another deep merge
 
 ## Usage
 ```console
