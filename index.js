@@ -1,11 +1,8 @@
 const isObject = obj => Object.prototype.toString.call(obj) === "[object Object]";
 const uniq = arr => Array.from(new Set(arr));
+const extendArrays = (a, b) => uniq([...a, ...b]);
 
-function extendArrays(a, b) {
-  return uniq([...a, ...b]);
-}
-
-function type(obj) {
+function getType(obj) {
   if (isObject(obj)) return "object";
   if (Array.isArray(obj)) return "array";
   return typeof obj;
@@ -22,8 +19,8 @@ export function deepMerge(a, b, {maxRecursion = 10, arrayExtend = false} = {}) {
   if (maxRecursion === 0) return a;
 
   for (const key of Object.keys(b)) {
-    const typeA = type(a[key]);
-    const typeB = type(b[key]);
+    const typeA = getType(a[key]);
+    const typeB = getType(b[key]);
     if (typeA !== typeB) { // different type, overwrite
       a[key] = b[key];
     } else { // same type
