@@ -13,7 +13,7 @@ function canExtendArray(key, arrayExtend) {
 }
 
 // merge b int a, arrayExtend is either a boolean or a array of property keys to allow extension
-export function deepMerge(a, b, {maxRecursion = 10, arrayExtend = false} = {}) {
+export function deepMerge(a, b, {arrayExtend = false, maxRecursion = 10} = {}) {
   if (Array.isArray(a) && Array.isArray(b)) return arrayExtend ? extendArrays(a, b) : b;
   if (!isObject(b)) return b;
   if (maxRecursion === 0) return a;
