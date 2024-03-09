@@ -28,7 +28,7 @@ deepMerge({a: [1], b: [1]}, {a: [2], b: [2]}, {arrayExtend: ["a"]});
 - `dst` *any*: Destination value
 - `src` *any*: Source value
 - `options` *object*:
-  - `arrayExtend` *boolean* or *string[]*: Whether to extend arrays instead of replacing them. When passed a string array, it will only extend the object keys provided in that array
+  - `arrayExtend` *boolean* or *string[]*: Whether to extend arrays instead of replacing them. When passed a string array, it will only extend the object keys provided in that array.
   - `maxRecursions` *number*: Amount of nesting levels to recurse into. Default: `10`
 
 © [silverwind](https://github.com/silverwind), distributed under BSD licence
