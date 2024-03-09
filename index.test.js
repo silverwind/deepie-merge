@@ -1,6 +1,17 @@
 import {deepMerge} from "./index.js";
 
 test("deepMerge", () => {
+  expect(deepMerge({a: [1]}, {a: [2]})).toEqual({a: [2]});
+  expect(deepMerge({a: [1]}, {a: [2]}, {arrayExtend: true})).toEqual({a: [1, 2]});
+  expect(deepMerge({a: [1]}, {a: [2]}, {arrayExtend: false})).toEqual({a: [2]});
+  expect(deepMerge({a: [1]}, {a: [2]}, {arrayExtend: ["a"]})).toEqual({a: [1, 2]});
+  expect(deepMerge({a: [1]}, {a: [2]}, {arrayExtend: ["b"]})).toEqual({a: [2]});
+
+  const obj = {};
+  expect(deepMerge({a: [obj]}, {a: [obj]}, {arrayExtend: true})).toEqual({a: [obj]});
+  expect(deepMerge({a: [obj]}, {a: [obj]}, {arrayExtend: false})).toEqual({a: [obj]});
+  expect(deepMerge({a: [1, 2]}, {a: [2, 3]}, {arrayExtend: true})).toEqual({a: [1, 2, 3]});
+
   expect(deepMerge({
     a: 1,
     arr: [1],
@@ -34,15 +45,4 @@ test("deepMerge", () => {
       },
     },
   });
-
-  expect(deepMerge({a: [1]}, {a: [2]})).toEqual({a: [2]});
-  expect(deepMerge({a: [1]}, {a: [2]}, {arrayExtend: true})).toEqual({a: [1, 2]});
-  expect(deepMerge({a: [1]}, {a: [2]}, {arrayExtend: false})).toEqual({a: [2]});
-  expect(deepMerge({a: [1]}, {a: [2]}, {arrayExtend: ["a"]})).toEqual({a: [1, 2]});
-  expect(deepMerge({a: [1]}, {a: [2]}, {arrayExtend: ["b"]})).toEqual({a: [2]});
-
-  const obj = {};
-  expect(deepMerge({a: [obj]}, {a: [obj]}, {arrayExtend: true})).toEqual({a: [obj]});
-  expect(deepMerge({a: [obj]}, {a: [obj]}, {arrayExtend: false})).toEqual({a: [obj]});
-  expect(deepMerge({a: [1, 2]}, {a: [2, 3]}, {arrayExtend: true})).toEqual({a: [1, 2, 3]});
 });
