@@ -1,4 +1,4 @@
-import {deepMerge} from "./index.js";
+import {deepMerge} from "./index.ts";
 
 test("deepMerge", () => {
   expect(deepMerge({a: [1]}, {a: [2]})).toEqual({a: [2]});
