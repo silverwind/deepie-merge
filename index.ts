@@ -21,7 +21,7 @@ function canExtendArray(key: string, arrayExtend: ArrayExtend): boolean {
   return Array.isArray(arrayExtend) ? arrayExtend.includes(key) : arrayExtend;
 }
 
-type DeepMergeable = {[key: string]: any} | any[];
+type DeepMergeable = Record<string, any> | any[];
 
 /** deep-merge b int a */
 export function deepMerge(a: DeepMergeable, b: DeepMergeable, {arrayExtend = false, maxRecursion = 10}: DeepieMergeOpts = {arrayExtend: false, maxRecursion: 10}): DeepMergeable {
