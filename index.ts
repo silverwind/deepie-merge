@@ -21,9 +21,19 @@ function canExtendArray(key: string, arrayExtend: ArrayExtend): boolean {
   return Array.isArray(arrayExtend) ? arrayExtend.includes(key) : arrayExtend;
 }
 
-// merge b int a, arrayExtend is either a boolean or a array of property keys to allow extension
-export function deepMerge(a: any, b: any, {arrayExtend = false, maxRecursion = 10}: DeepieMergeOpts = {arrayExtend: false, maxRecursion: 10}): any {
-  if (Array.isArray(a) && Array.isArray(b)) return arrayExtend ? extendArrays(a, b) : b;
+type DeepMergeable = {[key: string]: any} | any[];
+
+/** deep-merge b int a */
+export function deepMerge(a: DeepMergeable, b: DeepMergeable, {arrayExtend = false, maxRecursion = 10}: DeepieMergeOpts = {arrayExtend: false, maxRecursion: 10}): DeepMergeable {
+  if (Array.isArray(a)) {
+    if (Array.isArray(b)) {
+      return arrayExtend ? extendArrays(a, b) : b;
+    } else {
+      return b;
+    }
+  } else if (Array.isArray(b)) {
+    return b;
+  }
   if (!isObject(b)) return b;
   if (maxRecursion === 0) return a;
 
