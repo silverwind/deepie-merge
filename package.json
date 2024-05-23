@@ -17,17 +17,17 @@
     "node": ">=18"
   },
   "devDependencies": {
-    "@types/node": "20.12.8",
+    "@types/node": "20.12.12",
     "eslint": "8.57.0",
-    "eslint-config-silverwind": "84.0.0",
-    "eslint-config-silverwind-typescript": "3.2.3",
+    "eslint-config-silverwind": "85.1.4",
+    "eslint-config-silverwind-typescript": "3.2.7",
     "typescript": "5.4.5",
-    "typescript-config-silverwind": "4.0.1",
-    "updates": "16.0.1",
-    "versions": "12.0.1",
+    "typescript-config-silverwind": "4.3.2",
+    "updates": "16.1.1",
+    "versions": "12.0.2",
     "vite": "5.2.11",
-    "vite-config-silverwind": "1.0.3",
-    "vitest": "1.5.3",
-    "vitest-config-silverwind": "9.0.4"
+    "vite-config-silverwind": "1.1.2",
+    "vitest": "1.6.0",
+    "vitest-config-silverwind": "9.0.6"
   }
 }
