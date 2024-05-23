@@ -21,18 +21,18 @@ function canExtendArray(key: string, arrayExtend: ArrayExtend): boolean {
   return Array.isArray(arrayExtend) ? arrayExtend.includes(key) : arrayExtend;
 }
 
-type DeepMergeable = Record<string, any> | any[];
+type DeepMergeable = {[key: string]: any} | any[];
 
 /** deep-merge b int a */
-export function deepMerge(a: DeepMergeable, b: DeepMergeable, {arrayExtend = false, maxRecursion = 10}: DeepieMergeOpts = {arrayExtend: false, maxRecursion: 10}): DeepMergeable {
+export function deepMerge<T extends DeepMergeable>(a: T, b: any, {arrayExtend = false, maxRecursion = 10}: DeepieMergeOpts = {arrayExtend: false, maxRecursion: 10}): T {
   if (Array.isArray(a)) {
     if (Array.isArray(b)) {
-      return arrayExtend ? extendArrays(a, b) : b;
+      return (arrayExtend ? extendArrays(a, b) : b) as T;
     } else {
       return b;
     }
   } else if (Array.isArray(b)) {
-    return b;
+    return b as T;
   }
   if (!isObject(b)) return b;
   if (maxRecursion === 0) return a;
