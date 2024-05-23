@@ -1,14 +1,24 @@
-const isObject = (obj: any): boolean => Object.prototype.toString.call(obj) === "[object Object]";
-const uniq = (arr: any[]): any[] => Array.from(new Set(arr));
-const extendArrays = (a: any[], b: any[]): any[] => uniq([...a, ...b]);
-
 type ArrayExtend = boolean | string[];
 
 type DeepieMergeOpts = {
-  /** Either a boolean or a array of property keys to allow extension. */
-  arrayExtend: ArrayExtend,
+  /** Either a boolean or a array of property keys to allow extension. Default: false */
+  arrayExtend?: ArrayExtend,
   /** Maximum recursions to perform. Default: 10. */
   maxRecursion?: number,
+}
+
+type DeepMergeable = {[key: string]: any} | any[];
+
+function isObject(obj: any): boolean {
+  return Object.prototype.toString.call(obj) === "[object Object]";
+}
+
+function extendArrays<T extends any[]>(a: T, b: T): T {
+  return uniq([...a, ...b]) as T;
+}
+
+function uniq<T extends any[]>(arr: T): T {
+  return Array.from(new Set(arr)) as T;
 }
 
 function getType(obj: any): string {
@@ -21,20 +31,18 @@ function canExtendArray(key: string, arrayExtend: ArrayExtend): boolean {
   return Array.isArray(arrayExtend) ? arrayExtend.includes(key) : arrayExtend;
 }
 
-type DeepMergeable = {[key: string]: any} | any[];
-
 /** deep-merge b int a */
 export function deepMerge<T extends DeepMergeable>(a: T, b: any, {arrayExtend = false, maxRecursion = 10}: DeepieMergeOpts = {arrayExtend: false, maxRecursion: 10}): T {
   if (Array.isArray(a)) {
     if (Array.isArray(b)) {
       return (arrayExtend ? extendArrays(a, b) : b) as T;
     } else {
-      return b;
+      return b as T;
     }
   } else if (Array.isArray(b)) {
     return b as T;
   }
-  if (!isObject(b)) return b;
+  if (!isObject(b)) return b as T;
   if (maxRecursion === 0) return a;
 
   for (const key of Object.keys(b)) {
