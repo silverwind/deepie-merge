@@ -31,6 +31,6 @@ Deep-merge `b` into `a`.
 - `b` *any*: Source value
 - `options` *object*:
   - `arrayExtend` *boolean* or *string[]*: Whether to extend arrays instead of replacing them. When passed a string array, it will only extend the object keys provided in that array.
-  - `maxRecursions` *number*: Amount of nesting levels to recurse into. Default: `10`
+  - `maxRecursions` *number*: Amount of nesting levels to recurse into. Default: `20`
 
 © [silverwind](https://github.com/silverwind), distributed under BSD licence

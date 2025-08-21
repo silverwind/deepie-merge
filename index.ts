@@ -32,7 +32,7 @@ function canExtendArray(key: string, arrayExtend: ArrayExtend): boolean {
 }
 
 /** deep-merge b int a */
-export function deepMerge<T extends DeepMergeable>(a: T, b: any, {arrayExtend = false, maxRecursion = 10}: DeepieMergeOpts = {arrayExtend: false, maxRecursion: 10}): T {
+export function deepMerge<T extends DeepMergeable>(a: T, b: any, {arrayExtend = false, maxRecursion = 20}: DeepieMergeOpts = {arrayExtend: false, maxRecursion: 10}): T {
   if (maxRecursion === 0) return a;
 
   if (Array.isArray(a)) {
