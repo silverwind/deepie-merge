@@ -1,4 +1,4 @@
-type ArrayExtend = boolean | string[];
+type ArrayExtend = boolean | Array<string>;
 
 type DeepieMergeOpts = {
   /** Either a boolean or a array of property keys to allow extension. Default: false */
@@ -7,17 +7,17 @@ type DeepieMergeOpts = {
   maxRecursion?: number,
 }
 
-type DeepMergeable = {[key: string]: any} | any[];
+type DeepMergeable = {[key: string]: any} | Array<any>;
 
 function isObject(obj: any): boolean {
   return Object.prototype.toString.call(obj) === "[object Object]";
 }
 
-function extendArrays<T extends any[]>(a: T, b: T): T {
+function extendArrays<T extends Array<any>>(a: T, b: T): T {
   return uniq([...a, ...b]) as T;
 }
 
-function uniq<T extends any[]>(arr: T): T {
+function uniq<T extends Array<any>>(arr: T): T {
   return Array.from(new Set(arr)) as T;
 }
 
