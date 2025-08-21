@@ -23,10 +23,12 @@ deepMerge({a: [1], b: [1]}, {a: [2], b: [2]}, {arrayExtend: ["a"]});
 
 ## API
 
-### deepMerge(dst, src, options)
+### deepMerge(a, b, options)
 
-- `dst` *any*: Destination value
-- `src` *any*: Source value
+Deep-merge `b` into `a`.
+
+- `a` *any*: Destination value
+- `b` *any*: Source value
 - `options` *object*:
   - `arrayExtend` *boolean* or *string[]*: Whether to extend arrays instead of replacing them. When passed a string array, it will only extend the object keys provided in that array.
   - `maxRecursions` *number*: Amount of nesting levels to recurse into. Default: `10`

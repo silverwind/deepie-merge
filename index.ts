@@ -33,6 +33,8 @@ function canExtendArray(key: string, arrayExtend: ArrayExtend): boolean {
 
 /** deep-merge b int a */
 export function deepMerge<T extends DeepMergeable>(a: T, b: any, {arrayExtend = false, maxRecursion = 10}: DeepieMergeOpts = {arrayExtend: false, maxRecursion: 10}): T {
+  if (maxRecursion === 0) return a;
+
   if (Array.isArray(a)) {
     if (Array.isArray(b)) {
       return (arrayExtend ? extendArrays(a, b) : b) as T;
@@ -42,21 +44,21 @@ export function deepMerge<T extends DeepMergeable>(a: T, b: any, {arrayExtend = 
   } else if (Array.isArray(b)) {
     return b as T;
   }
-  if (!isObject(b)) return b as T;
-  if (maxRecursion === 0) return a;
 
-  for (const key of Object.keys(b)) {
-    const typeA = getType(a[key]);
-    const typeB = getType(b[key]);
-    if (typeA !== typeB) { // different type, overwrite
-      a[key] = b[key];
-    } else { // same type
-      if (typeA === "array" && canExtendArray(key, arrayExtend)) {
-        a[key] = extendArrays(a[key], b[key]);
-      } else if (typeA === "object") {
-        a[key] = deepMerge(a[key], b[key], {arrayExtend, maxRecursion: maxRecursion - 1});
-      } else {
+  if (isObject(a) && isObject(b)) {
+    for (const key of Object.keys(b)) {
+      const typeA = getType(a[key]);
+      const typeB = getType(b[key]);
+      if (typeA !== typeB) { // different type, overwrite
         a[key] = b[key];
+      } else { // same type
+        if (typeA === "array" && canExtendArray(key, arrayExtend)) {
+          a[key] = extendArrays(a[key], b[key]);
+        } else if (typeA === "object") {
+          a[key] = deepMerge(a[key], b[key], {arrayExtend, maxRecursion: maxRecursion - 1});
+        } else {
+          a[key] = b[key];
+        }
       }
     }
   }

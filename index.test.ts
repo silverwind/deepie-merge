@@ -1,6 +1,11 @@
 import {deepMerge} from "./index.ts";
 
 test("deepMerge", () => {
+  expect(deepMerge({a: [1]}, null)).toEqual({a: [1]});
+  expect(deepMerge({a: [1]}, undefined)).toEqual({a: [1]});
+  expect(deepMerge(null, {a: [1]})).toEqual(null);
+  expect(deepMerge(undefined, {a: [1]})).toEqual(undefined);
+
   expect(deepMerge({a: [1]}, {a: [2]})).toEqual({a: [2]});
   expect(deepMerge({a: [1]}, {a: [2]})).toEqual({a: [2]});
   expect(deepMerge({a: [1]}, {a: [2]}, {arrayExtend: true})).toEqual({a: [1, 2]});
