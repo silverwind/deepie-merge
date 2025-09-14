@@ -5,7 +5,7 @@ type DeepieMergeOpts = {
   arrayExtend?: ArrayExtend,
   /** Maximum recursions to perform. Default: 10. */
   maxRecursion?: number,
-}
+};
 
 type DeepMergeable = {[key: string]: any} | Array<any>;
 
