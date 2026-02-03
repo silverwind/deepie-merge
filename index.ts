@@ -13,52 +13,42 @@ function isObject(obj: any): boolean {
   return Object.prototype.toString.call(obj) === "[object Object]";
 }
 
-function extendArrays<T extends Array<any>>(a: T, b: T): T {
-  return uniq([...a, ...b]) as T;
-}
-
-function uniq<T extends Array<any>>(arr: T): T {
-  return Array.from(new Set(arr)) as T;
-}
-
 function getType(obj: any): string {
   if (isObject(obj)) return "object";
   if (Array.isArray(obj)) return "array";
   return typeof obj;
 }
 
-function canExtendArray(key: string, arrayExtend: ArrayExtend): boolean {
-  return Array.isArray(arrayExtend) ? arrayExtend.includes(key) : arrayExtend;
+/** deep-merge b into a */
+export function deepMerge<T extends DeepMergeable>(a: T, b: any, {arrayExtend = false, maxRecursion = 20}: DeepieMergeOpts = {arrayExtend: false, maxRecursion: 10}): T {
+  return merge(a, b, arrayExtend, maxRecursion) as T;
 }
 
-/** deep-merge b int a */
-export function deepMerge<T extends DeepMergeable>(a: T, b: any, {arrayExtend = false, maxRecursion = 20}: DeepieMergeOpts = {arrayExtend: false, maxRecursion: 10}): T {
+function merge(a: any, b: any, arrayExtend: ArrayExtend, maxRecursion: number): any {
   if (maxRecursion === 0) return a;
 
   if (Array.isArray(a)) {
     if (Array.isArray(b)) {
-      return (arrayExtend ? extendArrays(a, b) : b) as T;
-    } else {
-      return b as T;
+      return arrayExtend ? Array.from(new Set([...a, ...b])) : b;
     }
-  } else if (Array.isArray(b)) {
-    return b as T;
+    return b;
   }
+  if (Array.isArray(b)) return b;
 
   if (isObject(a) && isObject(b)) {
-    for (const key of Object.keys(b)) {
+    const keys = Object.keys(b);
+    for (let i = 0, len = keys.length; i < len; i++) {
+      const key = keys[i];
       const typeA = getType(a[key]);
       const typeB = getType(b[key]);
-      if (typeA !== typeB) { // different type, overwrite
+      if (typeA !== typeB) {
         a[key] = b[key];
-      } else { // same type
-        if (typeA === "array" && canExtendArray(key, arrayExtend)) {
-          a[key] = extendArrays(a[key], b[key]);
-        } else if (typeA === "object") {
-          a[key] = deepMerge(a[key], b[key], {arrayExtend, maxRecursion: maxRecursion - 1});
-        } else {
-          a[key] = b[key];
-        }
+      } else if (typeA === "array" && (Array.isArray(arrayExtend) ? arrayExtend.includes(key) : arrayExtend)) {
+        a[key] = Array.from(new Set([...a[key], ...b[key]]));
+      } else if (typeA === "object") {
+        a[key] = merge(a[key], b[key], arrayExtend, maxRecursion - 1);
+      } else {
+        a[key] = b[key];
       }
     }
   }
