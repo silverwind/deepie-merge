@@ -57,4 +57,20 @@ test("deepMerge", () => {
   expect(deepMerge([1], {})).toEqual({});
   expect(deepMerge({}, [1])).toEqual([1]);
   expect(deepMerge({}, {})).toEqual({});
+
+  const original = {a: 1, deep: {b: 2}};
+  const result = deepMerge(original, {a: 2, deep: {c: 3}}, {clone: true});
+  expect(result).toEqual({a: 2, deep: {b: 2, c: 3}});
+  expect(original).toEqual({a: 1, deep: {b: 2}});
+
+  const originalArr = [1, 2];
+  const resultArr = deepMerge(originalArr, [3, 4], {clone: true, arrayExtend: true});
+  expect(resultArr).toEqual([1, 2, 3, 4]);
+  expect(originalArr).toEqual([1, 2]);
+
+  const customClone = (value: any) => structuredClone(value);
+  const original2 = {a: 1, deep: {b: 2}};
+  const result2 = deepMerge(original2, {a: 2, deep: {c: 3}}, {clone: customClone});
+  expect(result2).toEqual({a: 2, deep: {b: 2, c: 3}});
+  expect(original2).toEqual({a: 1, deep: {b: 2}});
 });

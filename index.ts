@@ -1,10 +1,12 @@
 type ArrayExtend = boolean | Array<string>;
 
-type DeepieMergeOpts = {
+type DeepieMergeOpts<T = any> = {
   /** Either a boolean or a array of property keys to allow extension. Default: false */
   arrayExtend?: ArrayExtend,
   /** Maximum recursions to perform. Default: 10. */
   maxRecursion?: number,
+  /** Return a new value instead of mutating the first argument. Default: false */
+  clone?: boolean | ((value: T) => T),
 };
 
 type DeepMergeable = {[key: string]: any} | Array<any>;
@@ -20,8 +22,8 @@ function getType(obj: any): string {
 }
 
 /** deep-merge b into a */
-export function deepMerge<T extends DeepMergeable>(a: T, b: any, {arrayExtend = false, maxRecursion = 20}: DeepieMergeOpts = {arrayExtend: false, maxRecursion: 10}): T {
-  return merge(a, b, arrayExtend, maxRecursion) as T;
+export function deepMerge<T extends DeepMergeable>(a: T, b: any, {arrayExtend = false, maxRecursion = 20, clone = false}: DeepieMergeOpts<T> = {arrayExtend: false, maxRecursion: 10}): T {
+  return merge(clone ? (typeof clone === "function" ? clone(a) : structuredClone(a)) : a, b, arrayExtend, maxRecursion) as T;
 }
 
 function merge(a: any, b: any, arrayExtend: ArrayExtend, maxRecursion: number): any {
