@@ -6,7 +6,7 @@ type DeepieMergeOpts<T = any> = {
   /** Maximum recursions to perform. Default: 10. */
   maxRecursion?: number,
   /** Return a new value instead of mutating the first argument. Default: false */
-  clone?: boolean | ((value: T) => T),
+  clone?: boolean | ((value: NoInfer<T>) => NoInfer<T>),
 };
 
 type DeepMergeable = {[key: string]: any} | Array<any>;
