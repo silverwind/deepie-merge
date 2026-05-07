@@ -3,8 +3,6 @@ import {deepMerge} from "./index.ts";
 test("deepMerge", () => {
   expect(deepMerge({a: [1]}, null)).toEqual({a: [1]});
   expect(deepMerge({a: [1]}, undefined)).toEqual({a: [1]});
-  expect(deepMerge(null!, {a: [1]})).toEqual(null);
-  expect(deepMerge(undefined!, {a: [1]})).toEqual(undefined);
 
   expect(deepMerge({a: [1]}, {a: [2]})).toEqual({a: [2]});
   expect(deepMerge({a: [1]}, {a: [2]})).toEqual({a: [2]});
@@ -54,14 +52,12 @@ test("deepMerge", () => {
 
   expect(deepMerge([1], [2])).toEqual([2]);
   expect(deepMerge([1], [2], {arrayExtend: true})).toEqual([1, 2]);
-  expect(deepMerge([1], {})).toEqual({});
-  expect(deepMerge({}, [1])).toEqual([1]);
   expect(deepMerge({}, {})).toEqual({});
 
-  const original = {a: 1, deep: {b: 2}};
+  const original = {a: 1, deep: {b: 2, c: 0}};
   const result = deepMerge(original, {a: 2, deep: {c: 3}}, {clone: true});
   expect(result).toEqual({a: 2, deep: {b: 2, c: 3}});
-  expect(original).toEqual({a: 1, deep: {b: 2}});
+  expect(original).toEqual({a: 1, deep: {b: 2, c: 0}});
 
   const originalArr = [1, 2];
   const resultArr = deepMerge(originalArr, [3, 4], {clone: true, arrayExtend: true});
@@ -69,8 +65,17 @@ test("deepMerge", () => {
   expect(originalArr).toEqual([1, 2]);
 
   const customClone = (value: any) => structuredClone(value);
-  const original2 = {a: 1, deep: {b: 2}};
+  const original2 = {a: 1, deep: {b: 2, c: 0}};
   const result2 = deepMerge(original2, {a: 2, deep: {c: 3}}, {clone: customClone});
   expect(result2).toEqual({a: 2, deep: {b: 2, c: 3}});
-  expect(original2).toEqual({a: 1, deep: {b: 2}});
+  expect(original2).toEqual({a: 1, deep: {b: 2, c: 0}});
+});
+
+test("deepMerge type: rejects keys not in target", () => {
+  type Config = {pin?: Record<string, string>};
+  const config: Config = {pin: {tsdown: "0.21.9"}};
+  // @ts-expect-error 'pnpm' is not a key of Config
+  deepMerge(config, {pnpm: "^10"});
+  // @ts-expect-error 'wrongKey' is not a key of nested target
+  deepMerge({a: 1, deep: {b: 2}}, {deep: {wrongKey: 3}});
 });

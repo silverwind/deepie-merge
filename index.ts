@@ -11,6 +11,11 @@ type DeepieMergeOpts<T = any> = {
 
 type DeepMergeable = {[key: string]: any} | Array<any>;
 
+type DeepPartial<T> =
+  T extends Array<infer U> ? Array<DeepPartial<U>> :
+    T extends object ? {[K in keyof T]?: DeepPartial<T[K]>} :
+      T;
+
 function isObject(obj: any): boolean {
   return Object.prototype.toString.call(obj) === "[object Object]";
 }
@@ -22,7 +27,7 @@ function getType(obj: any): string {
 }
 
 /** deep-merge b into a */
-export function deepMerge<T extends DeepMergeable>(a: T, b: any, {arrayExtend = false, maxRecursion = 20, clone = false}: DeepieMergeOpts<T> = {arrayExtend: false, maxRecursion: 10}): T {
+export function deepMerge<T extends DeepMergeable>(a: T, b: DeepPartial<T> | null | undefined, {arrayExtend = false, maxRecursion = 20, clone = false}: DeepieMergeOpts<T> = {arrayExtend: false, maxRecursion: 10}): T {
   return merge(clone ? (typeof clone === "function" ? clone(a) : structuredClone(a)) : a, b, arrayExtend, maxRecursion) as T;
 }
 
