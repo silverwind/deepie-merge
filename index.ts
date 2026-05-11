@@ -11,10 +11,14 @@ type DeepieMergeOpts<T = any> = {
 
 type DeepMergeable = {[key: string]: any} | Array<any>;
 
-type DeepPartial<T> =
-  T extends Array<infer U> ? Array<DeepPartial<U>> :
-    T extends object ? {[K in keyof T]?: DeepPartial<T[K]>} :
-      T;
+/** Same top-level shape as `T` (array vs object) with the same keys, but with
+ *  values widened to `unknown`. Catches array/object mismatches and top-level
+ *  excess keys on fresh literals, while accepting wider override types
+ *  (e.g. `Partial<UserConfig>` against a `satisfies`-narrowed literal). */
+type DeepMergeSource<T> =
+  T extends ReadonlyArray<any> ? ReadonlyArray<unknown> :
+    T extends object ? {[K in keyof T]?: unknown} :
+      never;
 
 function isObject(obj: any): boolean {
   return Object.prototype.toString.call(obj) === "[object Object]";
@@ -27,7 +31,7 @@ function getType(obj: any): string {
 }
 
 /** deep-merge b into a */
-export function deepMerge<T extends DeepMergeable>(a: T, b: NoInfer<T> | DeepPartial<NoInfer<T>> | null | undefined, {arrayExtend = false, maxRecursion = 20, clone = false}: DeepieMergeOpts<T> = {arrayExtend: false, maxRecursion: 10}): T {
+export function deepMerge<T extends DeepMergeable>(a: T, b: NoInfer<T> | DeepMergeSource<NoInfer<T>> | null | undefined, {arrayExtend = false, maxRecursion = 20, clone = false}: DeepieMergeOpts<T> = {arrayExtend: false, maxRecursion: 10}): T {
   return merge(clone ? (typeof clone === "function" ? clone(a) : structuredClone(a)) : a, b, arrayExtend, maxRecursion) as T;
 }
 

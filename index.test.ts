@@ -62,9 +62,8 @@ test("deepMerge", () => {
   expect(deepMerge({}, {})).toEqual({});
 
   const original = {a: 1, deep: {b: 2}};
-  // @ts-expect-error 'c' is not a key of `deep`
-  const result = deepMerge(original, {a: 2, deep: {c: 3}}, {clone: true});
-  expect(result).toEqual({a: 2, deep: {b: 2, c: 3}});
+  const result = deepMerge(original, {a: 2, deep: {b: 3}}, {clone: true});
+  expect(result).toEqual({a: 2, deep: {b: 3}});
   expect(original).toEqual({a: 1, deep: {b: 2}});
 
   const originalArr = [1, 2];
@@ -74,19 +73,16 @@ test("deepMerge", () => {
 
   const customClone = (value: any) => structuredClone(value);
   const original2 = {a: 1, deep: {b: 2}};
-  // @ts-expect-error 'c' is not a key of `deep`
-  const result2 = deepMerge(original2, {a: 2, deep: {c: 3}}, {clone: customClone});
-  expect(result2).toEqual({a: 2, deep: {b: 2, c: 3}});
+  const result2 = deepMerge(original2, {a: 2, deep: {b: 3}}, {clone: customClone});
+  expect(result2).toEqual({a: 2, deep: {b: 3}});
   expect(original2).toEqual({a: 1, deep: {b: 2}});
 });
 
-test("deepMerge type: rejects keys not in target", () => {
+test("deepMerge type: rejects top-level keys not in target", () => {
   type Config = {pin?: Record<string, string>};
   const config: Config = {pin: {tsdown: "0.21.9"}};
   // @ts-expect-error 'pnpm' is not a key of Config
   deepMerge(config, {pnpm: "^10"});
-  // @ts-expect-error 'wrongKey' is not a key of nested target
-  deepMerge({a: 1, deep: {b: 2}}, {deep: {wrongKey: 3}});
 });
 
 test("deepMerge type: accepts full T as second arg in generic context", () => {
@@ -94,4 +90,21 @@ test("deepMerge type: accepts full T as second arg in generic context", () => {
     return deepMerge(a, b);
   }
   expect(merge({a: 1, b: 2}, {a: 3, b: 4})).toEqual({a: 3, b: 4});
+});
+
+test("deepMerge type: accepts wider override against a satisfies-narrowed literal", () => {
+  type Config = {clearScreen?: boolean, important?: boolean | string};
+  const overrides: Partial<Config> = {clearScreen: true, important: "always"};
+  const result = deepMerge({
+    clearScreen: false,
+    important: true,
+  } satisfies Config, overrides);
+  expect(result).toEqual({clearScreen: true, important: "always"});
+});
+
+test("deepMerge type: accepts union of object and primitive at nested position", () => {
+  type Config = {framework?: string | {name: string, options: object}};
+  const overrides: Partial<Config> = {framework: "react"};
+  const result = deepMerge({framework: {name: "default", options: {}}}, overrides);
+  expect(result).toEqual({framework: "react"});
 });
