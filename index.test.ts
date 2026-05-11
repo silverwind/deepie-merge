@@ -88,3 +88,10 @@ test("deepMerge type: rejects keys not in target", () => {
   // @ts-expect-error 'wrongKey' is not a key of nested target
   deepMerge({a: 1, deep: {b: 2}}, {deep: {wrongKey: 3}});
 });
+
+test("deepMerge type: accepts full T as second arg in generic context", () => {
+  function merge<T extends {[key: string]: any}>(a: T, b: T): T {
+    return deepMerge(a, b);
+  }
+  expect(merge({a: 1, b: 2}, {a: 3, b: 4})).toEqual({a: 3, b: 4});
+});

@@ -27,7 +27,7 @@ function getType(obj: any): string {
 }
 
 /** deep-merge b into a */
-export function deepMerge<T extends DeepMergeable>(a: T, b: DeepPartial<T> | null | undefined, {arrayExtend = false, maxRecursion = 20, clone = false}: DeepieMergeOpts<T> = {arrayExtend: false, maxRecursion: 10}): T {
+export function deepMerge<T extends DeepMergeable>(a: T, b: NoInfer<T> | DeepPartial<NoInfer<T>> | null | undefined, {arrayExtend = false, maxRecursion = 20, clone = false}: DeepieMergeOpts<T> = {arrayExtend: false, maxRecursion: 10}): T {
   return merge(clone ? (typeof clone === "function" ? clone(a) : structuredClone(a)) : a, b, arrayExtend, maxRecursion) as T;
 }
 
