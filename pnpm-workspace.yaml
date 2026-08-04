@@ -5,3 +5,4 @@ minimumReleaseAge: 0
 allowBuilds:
   unrs-resolver: false
 confirmModulesPurge: false
+verifyDepsBeforeRun: false
