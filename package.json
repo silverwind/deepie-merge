@@ -3,7 +3,10 @@
   "version": "3.0.2",
   "description": "Yay, another deep merge",
   "author": "silverwind <me@silverwind.io>",
-  "repository": "silverwind/deepie-merge",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/silverwind/deepie-merge.git"
+  },
   "license": "BSD-2-Clause",
   "type": "module",
   "sideEffects": false,

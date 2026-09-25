@@ -2,6 +2,4 @@ savePrefix: ''
 updateNotifier: false
 ignoreScripts: true
 minimumReleaseAge: 0
-allowBuilds:
-  unrs-resolver: false
 verifyDepsBeforeRun: false
