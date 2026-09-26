@@ -48,16 +48,15 @@ function merge(a: any, b: any, arrayExtend: ArrayExtend, maxRecursion: number): 
     const keys = Object.keys(b);
     for (let i = 0, len = keys.length; i < len; i++) {
       const key = keys[i];
-      if (key === "__proto__" || ((key === "constructor" || key === "prototype") && isObject(a[key]) && !Object.hasOwn(a, key))) continue;
-      const typeA = getType(a[key]);
-      if (typeA !== getType(b[key])) {
-        a[key] = b[key];
-      } else if (typeA === "array" && (Array.isArray(arrayExtend) ? arrayExtend.includes(key) : arrayExtend)) {
-        a[key] = union(a[key], b[key]);
-      } else if (typeA === "object" && a[key] !== null) {
-        a[key] = merge(a[key], b[key], arrayExtend, maxRecursion - 1);
+      const valueA = a[key];
+      if (key === "__proto__" || ((key === "constructor" || key === "prototype") && isObject(valueA) && !Object.hasOwn(a, key))) continue;
+      const valueB = b[key];
+      if (isObject(valueA) && isObject(valueB)) {
+        a[key] = merge(valueA, valueB, arrayExtend, maxRecursion - 1);
+      } else if (Array.isArray(valueA) && Array.isArray(valueB) && (Array.isArray(arrayExtend) ? arrayExtend.includes(key) : arrayExtend)) {
+        a[key] = union(valueA, valueB);
       } else {
-        a[key] = b[key];
+        a[key] = valueB === null && getType(valueA) === "object" ? valueA : valueB; // null in b keeps an existing object for compatibility
       }
     }
   }
