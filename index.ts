@@ -3,7 +3,7 @@ type ArrayExtend = boolean | Array<string>;
 type DeepieMergeOpts<T = any> = {
   /** Either a boolean or an array of property keys to allow extension. Default: false */
   arrayExtend?: ArrayExtend,
-  /** Maximum recursions to perform. Default: 10. */
+  /** Maximum recursions to perform. Default: 20. */
   maxRecursion?: number,
   /** Return a new value instead of mutating the first argument. Default: false */
   clone?: boolean | ((value: NoInfer<T>) => NoInfer<T>),
@@ -28,7 +28,7 @@ function getType(obj: any): string {
 }
 
 /** deep-merge b into a */
-export function deepMerge<T extends DeepMergeable>(a: T, b: NoInfer<T> | DeepMergeSource<NoInfer<T>> | null | undefined, {arrayExtend = false, maxRecursion = 20, clone = false}: DeepieMergeOpts<T> = {arrayExtend: false, maxRecursion: 10}): T {
+export function deepMerge<T extends DeepMergeable>(a: T, b: NoInfer<T> | DeepMergeSource<NoInfer<T>> | null | undefined, {arrayExtend = false, maxRecursion = 20, clone = false}: DeepieMergeOpts<T> = {}): T {
   return merge(clone ? (typeof clone === "function" ? clone(a) : structuredClone(a)) : a, b, arrayExtend, maxRecursion);
 }
 
