@@ -32,6 +32,7 @@ Deep-merge `b` into `a`.
 - `b` *any*: Source value
 - `options` *object*:
   - `arrayExtend` *boolean* or *string[]*: Whether to extend arrays instead of replacing them. When passed a string array, it will only extend the object keys provided in that array.
-  - `maxRecursions` *number*: Amount of nesting levels to recurse into. Default: `20`
+  - `maxRecursion` *number*: Amount of nesting levels to recurse into. Default: `20`
+  - `clone` *boolean* or *function*: Return a new value instead of mutating `a`. A function is used to clone `a`, otherwise `structuredClone`. Default: `false`
 
 © [silverwind](https://github.com/silverwind), distributed under BSD licence
