@@ -75,6 +75,13 @@ test("deepMerge", () => {
   const original2 = {a: 1, deep: {b: 2}};
   expect(deepMerge(original2, {a: 2, deep: {b: 3}}, {clone: (value) => structuredClone(value)})).toEqual({a: 2, deep: {b: 3}});
   expect(original2).toEqual({a: 1, deep: {b: 2}});
+
+  expect(deepMerge({}, JSON.parse(`{"__proto__": {"polluted": true}}`))).toEqual({});
+  expect(Object.prototype).not.toHaveProperty("polluted");
+  function Foo() {}
+  expect(deepMerge(Object.create(Foo), JSON.parse(`{"prototype": {"polluted": true}}`))).toEqual({});
+  expect(Foo.prototype).not.toHaveProperty("polluted");
+  expect(deepMerge({}, {constructor: 1})).toEqual({constructor: 1});
 });
 
 test("deepMerge type: rejects top-level keys not in target", () => {

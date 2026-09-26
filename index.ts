@@ -48,6 +48,7 @@ function merge(a: any, b: any, arrayExtend: ArrayExtend, maxRecursion: number): 
     const keys = Object.keys(b);
     for (let i = 0, len = keys.length; i < len; i++) {
       const key = keys[i];
+      if (key === "__proto__" || ((key === "constructor" || key === "prototype") && isObject(a[key]) && !Object.hasOwn(a, key))) continue;
       const typeA = getType(a[key]);
       if (typeA !== getType(b[key])) {
         a[key] = b[key];
