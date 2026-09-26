@@ -4,8 +4,9 @@
 > Yay, another deep merge
 
 ## Usage
-```console
-npm i deepie-merge
+
+```sh
+pnpm add deepie-merge
 ```
 
 ```js
