@@ -54,7 +54,7 @@ function merge(a: any, b: any, arrayExtend: ArrayExtend, maxRecursion: number): 
         a[key] = b[key];
       } else if (typeA === "array" && (Array.isArray(arrayExtend) ? arrayExtend.includes(key) : arrayExtend)) {
         a[key] = union(a[key], b[key]);
-      } else if (typeA === "object") {
+      } else if (typeA === "object" && a[key] !== null) {
         a[key] = merge(a[key], b[key], arrayExtend, maxRecursion - 1);
       } else {
         a[key] = b[key];

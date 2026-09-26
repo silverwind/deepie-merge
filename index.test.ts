@@ -59,6 +59,7 @@ test("deepMerge", () => {
   expect(deepMerge([1], {})).toEqual({});
   expect(deepMerge({}, [1])).toEqual([1]);
   expect(deepMerge({}, {})).toEqual({});
+  expect(deepMerge({a: null}, {a: {b: 1}})).toEqual({a: {b: 1}});
 
   const nested = (value: number) => Array.from({length: 12}).reduce<Record<string, any>>((inner) => ({x: inner}), {v: value});
   expect(deepMerge(nested(1), nested(2))).toEqual(nested(2));
