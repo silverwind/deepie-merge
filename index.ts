@@ -48,8 +48,8 @@ function merge(a: any, b: any, arrayExtend: ArrayExtend, maxRecursion: number): 
     const keys = Object.keys(b);
     for (let i = 0, len = keys.length; i < len; i++) {
       const key = keys[i];
-      if (key === "__proto__") continue;
-      const valueA = Object.hasOwn(a, key) ? a[key] : undefined;
+      const valueA = a[key];
+      if (key === "__proto__" || ((key === "constructor" || key === "prototype") && isObject(valueA) && !Object.hasOwn(a, key))) continue;
       const valueB = b[key];
       if (isObject(valueA) && isObject(valueB)) {
         a[key] = merge(valueA, valueB, arrayExtend, maxRecursion - 1);

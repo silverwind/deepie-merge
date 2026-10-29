@@ -28,8 +28,6 @@ deepMerge({a: [1], b: [1]}, {a: [2], b: [2]}, {arrayExtend: ["a"]});
 
 Deep-merge `b` into `a`.
 
-Only own destination values are merged and `__proto__` keys are skipped.
-
 - `a` *any*: Destination value
 - `b` *any*: Source value
 - `options` *object*:

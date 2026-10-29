@@ -48,19 +48,9 @@ test("deepMerge", () => {
   expect(deepMerge({}, JSON.parse(`{"__proto__": {"polluted": true}}`))).toEqual({});
   expect(Object.prototype).not.toHaveProperty("polluted");
   function Foo() {}
-  const source = JSON.parse(`{"prototype": {"polluted": true}}`);
-  expect(deepMerge(Object.create(Foo), source)).toEqual(source);
+  expect(deepMerge(Object.create(Foo), JSON.parse(`{"prototype": {"polluted": true}}`))).toEqual({});
   expect(Foo.prototype).not.toHaveProperty("polluted");
   expect(deepMerge({}, {constructor: 1})).toEqual({constructor: 1});
-});
-
-test("deepMerge ignores inherited destination values", () => {
-  const prototype = {toString: {existing: true}, hasOwnProperty: [1], valueOf: {existing: true}, constructor: {existing: true}};
-  const target = Object.create(prototype);
-  const source = JSON.parse(`{"toString": {"merged": true}, "hasOwnProperty": [2], "valueOf": null, "constructor": 1}`);
-  expect(deepMerge(target, source, {arrayExtend: true})).toEqual(source);
-  expect(prototype).toEqual({toString: {existing: true}, hasOwnProperty: [1], valueOf: {existing: true}, constructor: {existing: true}});
-  expect(Object.getPrototypeOf(target)).toBe(prototype);
 });
 
 test("deepMerge type: rejects top-level keys not in target", () => {
