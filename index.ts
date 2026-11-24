@@ -15,7 +15,7 @@ type DeepMergeable = {[key: string]: any} | Array<any>;
 type DeepMergeSource<T> =
   T extends ReadonlyArray<any> ? ReadonlyArray<unknown> :
     T extends object ? {[K in keyof T]?: unknown} :
-      never;
+    never;
 
 function isObject(obj: any): boolean {
   return Object.prototype.toString.call(obj) === "[object Object]";
